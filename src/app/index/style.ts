@@ -4,12 +4,21 @@ import { StyleSheet } from "react-native";
 export const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    paddingTop: 62,
+    // justifyContent: "center",
+    // alignItems: "center",
+  },
+  header: {
+    paddingHorizontal: 24,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 32,
   },
-  title: {
-    color: colors.green[900],
-    fontSize: 20,
-    fontWeight: "bold",
+  logo: {
+    height: 32,
+    width: 38,
   },
+  addButton: {},
 });
