@@ -5,20 +5,50 @@ import {
   FlatList,
   Modal,
   Text,
+  Alert,
 } from "react-native";
+import { useState, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router , useFocusEffect} from "expo-router";
 
 import { styles } from "./styles";
 import { colors } from "@/styles/colors";
 import { Categories } from "@/components/categories";
+import { linkStorage, LinkStorage} from "@/storage/link-storage";
+
 import { Link } from "@/components/link";
 import { Option } from "@/components/option";
-import { useState } from "react";
 import { categories } from "@/utils/categories";
 
 export default function Index() {
+  const [links, setLinks] = useState<LinkStorage[]>([]);
   const [category, setCategory] = useState(categories[0].name);
+  
+  async function getLinks() {
+    try{
+      const response = await linkStorage.get()
+      console.log("🚀 ~ getLinks ~ response:", response)
+      console.log("🚀 ~ Index ~ category:", category)
+      const filtered = response.filter((link) => link.category === category)
+      console.log("🚀 ~ getLinks ~ link.category :", links )
+
+
+
+      setLinks(filtered)
+
+    }catch(error){
+      Alert.alert("Erro", " Não foi possível listar os links")
+      console.log("🚀 ~ getLinks ~ error:", error)
+    }
+    
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getLinks();
+      console.log("🚀 ~ Index ~ category:", category)
+  },[categories])
+)
 
   return (
     <View style={styles.container}>
@@ -31,12 +61,12 @@ export default function Index() {
       <Categories selected={category} onChange={setCategory} />
 
       <FlatList
-        data={["1", "2", "3"]}
-        keyExtractor={(item) => item}
-        renderItem={() => (
+        data={links}
+        keyExtractor={(item) => item.id}
+        renderItem={({item}) => (
           <Link
-            name="Douglas"
-            url="https://douglasresende.com.br"
+            name={item.name}
+            url={item.url}
             onDetails={() => console.log("clicou")}
           />
         )}
