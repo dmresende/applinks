@@ -6,6 +6,7 @@ import {
   Modal,
   Text,
   Alert,
+  Linking,
 } from "react-native";
 import { useState, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -69,6 +70,24 @@ export default function Index() {
     ]);
   }
 
+  async function handleOpenLink() {
+    try {
+      const validateProtocol = link.url.split("://");
+      let url = link.url;
+
+      if (validateProtocol.length < 2) url = `https://${link.url}`;
+
+      await Linking.openURL(url);
+      setShowModal(false);
+    } catch (error) {
+      Alert.alert(
+        "Erro",
+        "Não foi possível abrir o link, verifique a URL e tente novamente"
+      );
+      console.log("🚀 ~ handleOpenLink ~ error:", error);
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       getLinks();
@@ -121,7 +140,12 @@ export default function Index() {
                 variant="secondary"
                 onPress={handleRemoveLink}
               />
-              <Option name="Abrir" icon="language" variant="secondary" />
+              <Option
+                name="Abrir"
+                icon="language"
+                variant="secondary"
+                onPress={handleOpenLink}
+              />
             </View>
           </View>
         </View>
