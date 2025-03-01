@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { styles } from "./styles";
@@ -8,6 +8,7 @@ type OptionProps = {
   name: string;
   icon: keyof typeof MaterialIcons.glyphMap;
   variant?: "primaty" | "secondary";
+  onPress?: () => void;
 };
 
 export function Option({
